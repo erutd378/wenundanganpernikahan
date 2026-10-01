@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Undangan Pernikahan - Andi & Sari</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Parisienne&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a12; color: #fff;
+    position: fixed; overscroll-behavior: none;
+  }
+
+  /* ============ BACKGROUND ============ */
+  .bg {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 0%, #2a1f14 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, #1a1428 0%, transparent 50%),
+      linear-gradient(180deg, #0d0b1a 0%, #050510 100%);
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(200, 168, 94, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 168, 94, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .dust {
+    position: absolute; width: 2px; height: 2px;
+    background: #c8a85e; border-radius: 50%;
+    box-shadow: 0 0 6px #c8a85e, 0 0 12px rgba(200, 168, 94, 0.5);
+    pointer-events: none; animation: dustFloat linear infinite;
+  }
+  @keyframes dustFloat {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translateY(50vh) translateX(20px); }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(-10vh) translateX(-20px); opacity: 0; }
+  }
+
+  .ornament-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(200, 168, 94, 0.12);
+    top: 50%; left: 50%; pointer-events: none;
+  }
+  .ornament-ring::before, .ornament-ring::after {
+    content: ''; position: absolute;
+    inset: -30px; border-radius: 50%;
+    border: 1px dashed rgba(200, 168, 94, 0.08);
+    animation: rotateRing 40s linear infinite;
+  }
+  .ornament-ring::after {
+    inset: -70px; border-style: dotted;
+    animation-duration: 60s; animation-direction: reverse;
+  }
+  @keyframes rotateRing { to { transform: rotate(360deg); } }
+  .ornament-ring:nth-of-type(1) { width: 400px; height: 400px; margin: -200px; }
+  .ornament-ring:nth-of-type(2) { width: 620px; height: 620px; margin: -310px; }
+  .ornament-ring:nth-of-type(3) { width: 800px; height: 800px; margin: -400px; }
+
+  /* ============ APP ============ */
+  .app {
+    position: relative; width: 100%; height: 100%;
+    margin: 0 auto; z-index: 1;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* ============ TOPBAR ============ */
+  .topbar {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 18px 22px 12px;
+    position: relative; z-index: 10; flex-shrink: 0;
+  }
+  .topbar-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; letter-spacing: 4px;
+    color: #c8a85e; font-weight: 600;
+    text-shadow: 0 0 15px rgba(200, 168, 94, 0.5), 1px 1px 0 #000;
+    text-transform: uppercase;
+  }
+  .topbar-brand::after {
+    content: 'SEJAK 2025';
+    display: block; font-size: 7px;
+    letter-spacing: 2px; color: rgba(200, 168, 94, 0.5);
+    margin-top: 1px; font-weight: 300;
+  }
+  .topbar-page-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; color: rgba(200, 168, 94, 0.7);
+    letter-spacing: 2px;
+  }
+  .topbar-page-num strong {
+    color: #c8a85e; font-size: 18px;
+    font-weight: 700; font-style: italic;
+  }
+
+  /* ============ CONTENT ============ */
+  .content {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    padding: 8px 20px 110px;
+    position: relative; z-index: 2;
+    scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+  }
+  .content::-webkit-scrollbar { width: 0; }
+
+  /* ============ PAGE ============ */
+  .page { display: none; transform-style: preserve-3d; }
+  .page.active { display: block; }
+
+  .page.active#page-home { animation: magSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .page.active#page-couple { animation: magSlideRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .page.active#page-event { animation: magDrop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .page.active#page-gallery { animation: magRotateIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .page.active#page-wish { animation: magZoomBlur 1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  @keyframes magSlideUp {
+    0% { opacity: 0; transform: translateY(80px); filter: blur(10px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes magSlideRight {
+    0% { opacity: 0; transform: translateX(-80px); filter: blur(10px); }
+    100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+  }
+  @keyframes magDrop {
+    0% { opacity: 0; transform: translateY(-80px) rotateX(40deg); filter: blur(10px); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0); filter: blur(0); }
+  }
+  @keyframes magRotateIn {
+    0% { opacity: 0; transform: rotate(-8deg) scale(0.85); filter: blur(12px); }
+    60% { transform: rotate(2deg) scale(1.03); filter: blur(0); }
+    100% { opacity: 1; transform: rotate(0) scale(1); }
+  }
+  @keyframes magZoomBlur {
+    0% { opacity: 0; transform: scale(1.3); filter: blur(20px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+
+  /* ============ EDITORIAL HEADER ============ */
+  .editorial-header {
+    display: flex; align-items: center;
+    gap: 14px; margin-bottom: 20px; position: relative;
+  }
+  .chapter-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px; font-weight: 300; font-style: italic;
+    color: #c8a85e; line-height: 0.85;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8), 0 0 25px rgba(200, 168, 94, 0.4);
+    letter-spacing: -3px; flex-shrink: 0;
+  }
+  .chapter-info {
+    flex: 1; border-left: 1px solid rgba(200, 168, 94, 0.3);
+    padding-left: 14px;
+  }
+  .chapter-label {
+    font-size: 8px; letter-spacing: 4px;
+    color: rgba(200, 168, 94, 0.6);
+    text-transform: uppercase; font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .chapter-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600;
+    color: #fff; letter-spacing: 1px; line-height: 1;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7), 3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+  .chapter-title em {
+    font-style: italic; color: #c8a85e;
+  }
+
+  /* ============ MAGAZINE CARD ============ */
+  .m-card {
+    background: linear-gradient(160deg, rgba(30, 25, 45, 0.85) 0%, rgba(15, 12, 25, 0.92) 100%);
+    border: 1px solid rgba(200, 168, 94, 0.2);
+    border-radius: 4px; padding: 22px 20px;
+    margin-bottom: 16px; position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 15px 40px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(200, 168, 94, 0.1),
+      inset 0 0 60px rgba(200, 168, 94, 0.03);
+  }
+  .m-card::before, .m-card::after {
+    content: ''; position: absolute;
+    width: 20px; height: 20px;
+    border: 1px solid #c8a85e; pointer-events: none;
+  }
+  .m-card::before {
+    top: 8px; left: 8px;
+    border-right: none; border-bottom: none;
+  }
+  .m-card::after {
+    bottom: 8px; right: 8px;
+    border-left: none; border-top: none;
+  }
+
+  .m-card-stagger { opacity: 0; animation: cardStagger 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  .m-card-stagger:nth-child(1) { animation-delay: 0.2s; }
+  .m-card-stagger:nth-child(2) { animation-delay: 0.35s; }
+  .m-card-stagger:nth-child(3) { animation-delay: 0.5s; }
+  .m-card-stagger:nth-child(4) { animation-delay: 0.65s; }
+  .m-card-stagger:nth-child(5) { animation-delay: 0.8s; }
+  .m-card-stagger:nth-child(6) { animation-delay: 0.95s; }
+  .m-card-stagger:nth-child(7) { animation-delay: 1.1s; }
+  .m-card-stagger:nth-child(8) { animation-delay: 1.25s; }
+
+  @keyframes cardStagger {
+    0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ============ HALAMAN BERANDA ============ */
+  .hero-mag { text-align: center; padding: 20px 0 10px; position: relative; }
+
+  .hero-eyebrow {
+    font-size: 9px; letter-spacing: 6px;
+    color: #c8a85e; text-transform: uppercase;
+    margin-bottom: 12px;
+    text-shadow: 1px 1px 0 #000, 0 0 15px rgba(200, 168, 94, 0.6);
+    font-weight: 500; position: relative; display: inline-block;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; position: absolute;
+    top: 50%; width: 24px; height: 1px;
+    background: #c8a85e; opacity: 0.6;
+  }
+  .hero-eyebrow::before { left: -34px; }
+  .hero-eyebrow::after { right: -34px; }
+
+  .cover-frame {
+    position: relative; margin: 22px auto;
+    width: 210px; height: 260px;
+    perspective: 1000px;
+  }
+  .cover-frame-inner {
+    width: 100%; height: 100%; position: relative;
+    transform-style: preserve-3d;
+    animation: coverSway 8s ease-in-out infinite;
+    border: 1px solid rgba(200, 168, 94, 0.5);
+    background:
+      linear-gradient(160deg, rgba(200, 168, 94, 0.1), transparent 60%),
+      linear-gradient(180deg, #1a1528 0%, #0d0b18 100%);
+    box-shadow:
+      0 25px 50px rgba(0, 0, 0, 0.7),
+      0 0 0 8px rgba(200, 168, 94, 0.05),
+      0 0 0 9px rgba(200, 168, 94, 0.15),
+      inset 0 0 60px rgba(200, 168, 94, 0.08);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; overflow: hidden;
+  }
+  @keyframes coverSway {
+    0%, 100% { transform: rotateY(-8deg) rotateX(4deg); }
+    50% { transform: rotateY(8deg) rotateX(-4deg); }
+  }
+  .cover-frame-inner::before {
+    content: ''; position: absolute;
+    inset: 12px; border: 1px solid rgba(200, 168, 94, 0.3);
+    pointer-events: none; z-index: 3;
+  }
+
+  /* Foto cover */
+  .cover-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.65;
+    filter: sepia(20%) brightness(0.7);
+    z-index: 1;
+  }
+
+  .cover-monogram {
+    font-family: 'Parisienne', cursive;
+    font-size: 72px; color: #c8a85e;
+    line-height: 1; position: relative; z-index: 2;
+    text-shadow:
+      -3px -3px 0 rgba(0, 0, 0, 0.9),
+      3px 3px 0 rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(200, 168, 94, 0.6);
+    animation: monogramShadow 4s ease-in-out infinite alternate;
+  }
+  @keyframes monogramShadow {
+    0% { text-shadow: -4px -4px 0 rgba(0,0,0,0.9), 4px 4px 0 rgba(0,0,0,0.4), 0 0 30px rgba(200,168,94,0.5); }
+    100% { text-shadow: 4px 4px 0 rgba(0,0,0,0.9), -4px -4px 0 rgba(0,0,0,0.4), 0 0 50px rgba(200,168,94,0.9); }
+  }
+  .cover-amp {
+    font-family: 'Parisienne', cursive;
+    font-size: 34px; color: rgba(255, 255, 255, 0.85);
+    line-height: 0.6; position: relative; z-index: 2;
+    text-shadow: -2px -2px 0 rgba(0,0,0,0.9), 2px 2px 6px rgba(0,0,0,0.5);
+  }
+  .cover-label {
+    position: absolute; bottom: 18px;
+    left: 0; right: 0; text-align: center;
+    font-size: 8px; letter-spacing: 3px;
+    color: rgba(200, 168, 94, 0.9);
+    text-transform: uppercase; z-index: 2;
+    text-shadow: 1px 1px 0 #000;
+  }
+  .cover-label::before, .cover-label::after {
+    content: '—'; margin: 0 6px; opacity: 0.5;
+  }
+
+  .hero-title-mag {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300;
+    letter-spacing: 6px; color: #fff;
+    line-height: 1; margin: 18px 0 6px;
+    text-transform: uppercase;
+    text-shadow:
+      3px 3px 0 rgba(0, 0, 0, 0.9),
+      6px 6px 0 rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(200, 168, 94, 0.4);
+    animation: titleShift 5s ease-in-out infinite alternate;
+  }
+  @keyframes titleShift {
+    0% { text-shadow: 3px 3px 0 rgba(0,0,0,0.9), 6px 6px 0 rgba(0,0,0,0.4), 0 0 30px rgba(200,168,94,0.4); }
+    100% { text-shadow: -3px -3px 0 rgba(0,0,0,0.9), -6px -6px 0 rgba(0,0,0,0.4), 0 0 45px rgba(200,168,94,0.8); }
+  }
+  .hero-title-mag em {
+    font-style: italic; font-family: 'Parisienne', cursive;
+    color: #c8a85e; font-size: 48px;
+    letter-spacing: 0; display: block;
+    margin: 4px 0; text-transform: none;
+  }
+
+  .hero-divider {
+    display: flex; align-items: center;
+    justify-content: center; gap: 10px;
+    margin: 14px 0; color: #c8a85e;
+    font-size: 10px; letter-spacing: 4px;
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: ''; flex: 1; max-width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c8a85e, transparent);
+  }
+
+  .hero-date-mag {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; letter-spacing: 8px;
+    color: #c8a85e;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.8), 0 0 20px rgba(200,168,94,0.5);
+    margin-top: 4px; font-weight: 600;
+  }
+
+  /* ============ COUNTDOWN ============ */
+  .cd-bar {
+    display: flex; gap: 0;
+    margin-top: 28px;
+    border: 1px solid rgba(200, 168, 94, 0.25);
+    border-radius: 4px; overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+  }
+  .cd-seg {
+    flex: 1; padding: 14px 4px; text-align: center;
+    position: relative;
+    border-right: 1px solid rgba(200, 168, 94, 0.15);
+  }
+  .cd-seg:last-child { border-right: none; }
+  .cd-seg-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; font-style: italic;
+    color: #c8a85e; display: block; line-height: 1;
+    text-shadow: -2px -2px 0 rgba(0,0,0,0.9), 2px 2px 0 rgba(0,0,0,0.4), 0 0 20px rgba(200,168,94,0.6);
+    animation: cdShadow 3s ease-in-out infinite alternate;
+  }
+  @keyframes cdShadow {
+    0% { text-shadow: -2px -2px 0 rgba(0,0,0,0.9), 0 0 15px rgba(200,168,94,0.5); }
+    100% { text-shadow: 2px 2px 0 rgba(0,0,0,0.9), 0 0 25px rgba(200,168,94,1); }
+  }
+  .cd-seg-label {
+    font-size: 8px; letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase; margin-top: 6px;
+    display: block;
+  }
+
+  .verse-mag {
+    margin-top: 22px; padding: 18px 18px 18px 24px;
+    border-left: 2px solid #c8a85e;
+    background: linear-gradient(90deg, rgba(200, 168, 94, 0.08), transparent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px; font-style: italic;
+    line-height: 1.7; color: rgba(255, 255, 255, 0.8);
+  }
+  .verse-mag .src {
+    font-style: normal; font-size: 10px;
+    letter-spacing: 3px; color: #c8a85e;
+    margin-top: 8px; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif; font-weight: 500;
+  }
+
+  /* ============ HALAMAN MEMPELAI ============ */
+  .profile-mag {
+    display: flex; flex-direction: column;
+    align-items: center; padding: 20px 18px;
+    text-align: center; position: relative;
+  }
+  .profile-frame {
+    width: 130px; height: 130px; border-radius: 50%;
+    position: relative; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px; overflow: hidden;
+    background: linear-gradient(145deg, #1a1528, #0d0b18);
+    border: 2px solid #c8a85e;
+    box-shadow:
+      0 0 0 5px rgba(200, 168, 94, 0.1),
+      0 0 0 6px rgba(200, 168, 94, 0.25),
+      0 15px 35px rgba(0, 0, 0, 0.6),
+      inset 0 0 30px rgba(200, 168, 94, 0.15);
+  }
+  .profile-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .profile-frame::before,
+  .profile-frame::after {
+    content: ''; position: absolute;
+    inset: -14px; border-radius: 50%;
+    border: 1px dashed rgba(200, 168, 94, 0.35);
+    animation: spinSlow 25s linear infinite;
+    z-index: 2;
+  }
+  .profile-frame::after {
+    inset: -22px; border-style: dotted;
+    border-color: rgba(200, 168, 94, 0.2);
+    animation-direction: reverse;
+    animation-duration: 35s;
+  }
+  @keyframes spinSlow { to { transform: rotate(360deg); } }
+
+  .profile-role {
+    font-size: 8px; letter-spacing: 5px;
+    color: rgba(200, 168, 94, 0.7);
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .profile-name {
+    font-family: 'Parisienne', cursive;
+    font-size: 42px; color: #c8a85e;
+    line-height: 1; margin-bottom: 8px;
+    text-shadow:
+      -3px -3px 0 rgba(0, 0, 0, 0.9),
+      3px 3px 0 rgba(0, 0, 0, 0.5),
+      0 0 25px rgba(200, 168, 94, 0.6);
+    animation: profileShadow 3.5s ease-in-out infinite alternate;
+  }
+  @keyframes profileShadow {
+    0% { text-shadow: -3px -3px 0 rgba(0,0,0,0.9), 0 0 25px rgba(200,168,94,0.5); }
+    100% { text-shadow: 3px 3px 0 rgba(0,0,0,0.9), 0 0 40px rgba(200,168,94,0.9); }
+  }
+  .profile-fullname {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600;
+    color: #fff; letter-spacing: 1px;
+    margin-bottom: 14px; line-height: 1.4;
+  }
+  .profile-parents {
+    font-size: 11px; line-height: 1.8;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 12px 0;
+    border-top: 1px solid rgba(200, 168, 94, 0.2);
+    border-bottom: 1px solid rgba(200, 168, 94, 0.2);
+    width: 100%; max-width: 240px;
+  }
+  .profile-parents .lbl {
+    color: #c8a85e; font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase;
+    display: block; margin-bottom: 4px; font-weight: 500;
+  }
+  .profile-ig {
+    display: inline-flex; align-items: center;
+    gap: 6px; margin-top: 12px;
+    padding: 6px 16px; background: transparent;
+    border: 1px solid rgba(200, 168, 94, 0.4);
+    border-radius: 2px; color: #c8a85e;
+    font-size: 10px; text-decoration: none;
+    letter-spacing: 1px; transition: all 0.3s;
+  }
+  .profile-ig:active { background: rgba(200, 168, 94, 0.15); }
+
+  .couple-sep {
+    display: flex; align-items: center;
+    justify-content: center; gap: 14px;
+    margin: 4px 0; color: #c8a85e;
+  }
+  .couple-sep-line {
+    flex: 1; max-width: 70px; height: 1px;
+    background: linear-gradient(90deg, transparent, #c8a85e, transparent);
+  }
+  .couple-sep-icon {
+    font-size: 22px;
+    text-shadow: -3px -3px 0 rgba(0,0,0,0.9), 3px 3px 0 rgba(0,0,0,0.5), 0 0 20px rgba(200,168,94,0.7);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ============ HALAMAN ACARA ============ */
+  .event-mag { position: relative; padding: 22px 20px; }
+  .event-mag-num {
+    position: absolute; top: 8px; right: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 44px;
+    color: rgba(200, 168, 94, 0.15);
+    line-height: 1; pointer-events: none;
+  }
+  .event-mag-icon {
+    width: 48px; height: 48px;
+    border: 1px solid rgba(200, 168, 94, 0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: #c8a85e;
+    margin-bottom: 14px;
+    background: rgba(200, 168, 94, 0.05);
+    position: relative;
+  }
+  .event-mag-icon::before {
+    content: ''; position: absolute;
+    inset: 4px; border: 1px solid rgba(200, 168, 94, 0.2);
+  }
+  .event-mag-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 600;
+    color: #fff; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 6px;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8), 3px 3px 8px rgba(0, 0, 0, 0.5);
+    animation: eventShadow 3s ease-in-out infinite alternate;
+  }
+  @keyframes eventShadow {
+    0% { text-shadow: 2px 2px 0 rgba(0,0,0,0.8), 0 0 15px rgba(200,168,94,0.3); }
+    100% { text-shadow: -2px -2px 0 rgba(0,0,0,0.8), 0 0 25px rgba(200,168,94,0.7); }
+  }
+  .event-mag-title em {
+    font-style: italic; color: #c8a85e;
+    font-size: 15px; letter-spacing: 4px;
+    display: block; margin-top: 4px;
+    font-weight: 400; text-transform: none;
+  }
+  .event-mag-sep {
+    height: 1px;
+    background: linear-gradient(90deg, #c8a85e, transparent);
+    margin: 14px 0; width: 60%;
+  }
+  .event-mag-row {
+    display: flex; align-items: flex-start;
+    gap: 12px; margin-bottom: 12px;
+    font-size: 12px; color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+  }
+  .event-mag-row i {
+    color: #c8a85e; font-size: 14px;
+    margin-top: 3px; width: 18px; text-align: center;
+  }
+  .event-mag-row strong {
+    display: block; color: #fff;
+    font-size: 12.5px; font-weight: 600;
+    letter-spacing: 0.5px; margin-bottom: 1px;
+  }
+  .event-mag-btn {
+    display: inline-flex; align-items: center;
+    gap: 8px; padding: 10px 20px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #c8a85e, #8b6f30);
+    color: #0d0b1a;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; border: none;
+    cursor: pointer;
+    box-shadow:
+      0 8px 20px rgba(200, 168, 94, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: all 0.3s;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  .event-mag-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(200, 168, 94, 0.3);
+  }
+
+  /* ============ HALAMAN GALERI ============ */
+  .gallery-mag {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+  .gal-item {
+    position: relative;
+    background: linear-gradient(145deg, #1a1528, #0d0b18);
+    border: 1px solid rgba(200, 168, 94, 0.25);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 3px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  .gal-item::before {
+    content: ''; position: absolute;
+    inset: 4px; border: 1px solid rgba(200, 168, 94, 0.15);
+    pointer-events: none; transition: all 0.3s; z-index: 3;
+  }
+  .gal-item:active {
+    border-color: #c8a85e;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(200, 168, 94, 0.4);
+    transform: scale(0.96);
+  }
+  .gal-item:active::before { inset: 7px; border-color: rgba(200, 168, 94, 0.5); }
+
+  /* Foto galeri */
+  .gal-item img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 1;
+  }
+  .gal-item:active img {
+    transform: scale(1.08);
+  }
+
+  .gal-item .gal-cap {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 5px;
+    font-size: 7.5px;
+    letter-spacing: 1px;
+    color: #c8a85e;
+    text-align: center;
+    text-transform: uppercase;
+    background: linear-gradient(transparent, rgba(0,0,0,0.95));
+    text-shadow: 1px 1px 0 #000;
+    z-index: 2;
+  }
+
+  /* Layout variations */
+  .gal-item.tall { grid-column: span 3; grid-row: span 2; aspect-ratio: 1/2; }
+  .gal-item.wide { grid-column: span 4; aspect-ratio: 2/1; }
+  .gal-item.square { grid-column: span 3; aspect-ratio: 1/1; }
+  .gal-item.small { grid-column: span 2; aspect-ratio: 1/1; }
+
+  /* ============ HALAMAN UCAPAN ============ */
+  .wish-form-mag { padding: 20px; }
+  .wish-form-mag input,
+  .wish-form-mag textarea {
+    width: 100%; padding: 12px 14px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(200, 168, 94, 0.25);
+    border-radius: 2px; color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; outline: none;
+    transition: all 0.3s;
+  }
+  .wish-form-mag input:focus,
+  .wish-form-mag textarea:focus {
+    border-color: #c8a85e;
+    background: rgba(200, 168, 94, 0.05);
+    box-shadow: 0 0 0 3px rgba(200, 168, 94, 0.1);
+  }
+  .wish-form-mag input::placeholder,
+  .wish-form-mag textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.5px;
+  }
+  .wish-form-mag textarea { resize: none; min-height: 70px; }
+
+  /* Info box WhatsApp */
+  .wa-info-box {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(37, 211, 102, 0.03));
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+  }
+  .wa-info-box i {
+    color: #25d366;
+    font-size: 20px;
+    filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.5));
+  }
+  .wa-info-box strong {
+    color: #25d366;
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .rsvp-mag {
+    display: flex; gap: 6px; margin-bottom: 12px;
+  }
+  .rsvp-mag-btn {
+    flex: 1; padding: 9px 4px;
+    background: transparent;
+    border: 1px solid rgba(200, 168, 94, 0.25);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 1px; cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+  }
+  .rsvp-mag-btn.sel {
+    background: rgba(200, 168, 94, 0.15);
+    border-color: #c8a85e;
+    color: #c8a85e;
+    box-shadow: 0 0 15px rgba(200, 168, 94, 0.2);
+  }
+
+  .wish-submit-mag {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #25d366, #128c3e);
+    color: #fff;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+  }
+  .wish-submit-mag:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  }
+  .wish-submit-mag i { font-size: 15px; }
+
+  /* Guest book */
+  .wishes-mag {
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-top: 8px;
+  }
+  .wishes-mag::-webkit-scrollbar { width: 2px; }
+  .wishes-mag::-webkit-scrollbar-thumb { background: rgba(200, 168, 94, 0.3); }
+
+  .wish-card {
+    padding: 14px 16px;
+    border-left: 2px solid #c8a85e;
+    background: linear-gradient(90deg, rgba(200, 168, 94, 0.06), transparent);
+    margin-bottom: 10px;
+    position: relative;
+    animation: wishSlide 0.5s ease;
+  }
+  @keyframes wishSlide {
+    from { opacity: 0; transform: translateX(-15px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .wish-card-top {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 6px;
+  }
+  .wish-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600;
+    color: #c8a85e; font-style: italic;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+  }
+  .wish-card-time {
+    font-size: 9px; color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 1px;
+  }
+  .wish-card-text {
+    font-size: 11.5px; line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 8px; font-style: italic;
+  }
+  .wish-tag {
+    display: inline-block; padding: 2px 8px;
+    font-size: 8.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600;
+    border: 1px solid;
+  }
+  .wish-tag.hadir { color: #6abf69; border-color: rgba(106, 191, 105, 0.5); background: rgba(106, 191, 105, 0.08); }
+  .wish-tag.tidak { color: #e57373; border-color: rgba(229, 115, 115, 0.5); background: rgba(229, 115, 115, 0.08); }
+  .wish-tag.ragu { color: #ffb74d; border-color: rgba(255, 183, 77, 0.5); background: rgba(255, 183, 77, 0.08); }
+
+  /* Gift */
+  .gift-mag {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 16px 18px;
+    border: 1px solid rgba(200, 168, 94, 0.2);
+    background: linear-gradient(135deg, rgba(200, 168, 94, 0.05), transparent);
+    margin-bottom: 10px; position: relative;
+  }
+  .gift-mag::before {
+    content: ''; position: absolute;
+    top: 4px; left: 4px;
+    width: 14px; height: 14px;
+    border-top: 1px solid #c8a85e;
+    border-left: 1px solid #c8a85e;
+    opacity: 0.5;
+  }
+  .gift-mag::after {
+    content: ''; position: absolute;
+    bottom: 4px; right: 4px;
+    width: 14px; height: 14px;
+    border-bottom: 1px solid #c8a85e;
+    border-right: 1px solid #c8a85e;
+    opacity: 0.5;
+  }
+  .gift-mag-bank {
+    font-size: 9px; letter-spacing: 3px;
+    color: rgba(200, 168, 94, 0.7);
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .gift-mag-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 700;
+    letter-spacing: 2px; color: #fff;
+    text-shadow: -2px -2px 0 rgba(0,0,0,0.9), 2px 2px 0 rgba(0,0,0,0.4), 0 0 12px rgba(200,168,94,0.4);
+  }
+  .gift-mag-owner {
+    font-size: 10px; color: rgba(255, 255, 255, 0.5);
+    margin-top: 3px; letter-spacing: 0.5px;
+  }
+  .gift-copy-mag {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid rgba(200, 168, 94, 0.4);
+    color: #c8a85e;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .gift-copy-mag:active { background: rgba(200, 168, 94, 0.15); }
+
+  /* Closing */
+  .closing-mag {
+    text-align: center;
+    padding: 30px 20px 10px;
+    border-top: 1px solid rgba(200, 168, 94, 0.2);
+    margin-top: 20px;
+  }
+  .closing-mag-script {
+    font-family: 'Parisienne', cursive;
+    font-size: 32px; color: #c8a85e;
+    margin-bottom: 12px;
+    text-shadow: -3px -3px 0 rgba(0,0,0,0.9), 3px 3px 0 rgba(0,0,0,0.4), 0 0 25px rgba(200,168,94,0.6);
+    animation: closingShadow 4s ease-in-out infinite alternate;
+  }
+  @keyframes closingShadow {
+    0% { text-shadow: -3px -3px 0 rgba(0,0,0,0.9), 0 0 25px rgba(200,168,94,0.5); }
+    100% { text-shadow: 3px 3px 0 rgba(0,0,0,0.9), 0 0 40px rgba(200,168,94,0.9); }
+  }
+  .closing-mag-text {
+    font-size: 11px; line-height: 1.9;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.5px;
+  }
+  .closing-mag-divider {
+    display: flex; justify-content: center;
+    align-items: center; gap: 10px;
+    margin: 14px 0; color: #c8a85e; font-size: 12px;
+  }
+  .closing-mag-divider::before, .closing-mag-divider::after {
+    content: ''; width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, #c8a85e, transparent);
+  }
+
+  /* ============ NAVBAR ============ */
+  .nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 82px;
+    background: linear-gradient(180deg, rgba(15, 12, 25, 0.85) 0%, rgba(8, 8, 16, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(200, 168, 94, 0.25);
+    display: flex; justify-content: space-around;
+    align-items: center; padding: 0 6px;
+    z-index: 1000;
+    box-shadow:
+      0 -8px 30px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(200, 168, 94, 0.1);
+  }
+  .nav-btn {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; padding: 8px 4px;
+    cursor: pointer; position: relative;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 4px; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn-icon {
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-btn-icon::before {
+    content: ''; position: absolute;
+    inset: 2px; border: 1px solid rgba(200, 168, 94, 0.25);
+    border-radius: 50%; opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .nav-btn i {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative; z-index: 2;
+  }
+  .nav-btn-label {
+    font-size: 7.5px; letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase; font-weight: 500;
+    transition: all 0.35s;
+    position: relative; z-index: 2;
+  }
+  .nav-btn.active .nav-btn-icon::before {
+    opacity: 1; transform: scale(1);
+    border-color: #c8a85e;
+    box-shadow: 0 0 15px rgba(200, 168, 94, 0.5), inset 0 0 10px rgba(200, 168, 94, 0.2);
+  }
+  .nav-btn.active i {
+    color: #c8a85e;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(200, 168, 94, 0.9));
+  }
+  .nav-btn.active .nav-btn-label {
+    color: #c8a85e; font-weight: 700;
+  }
+  .nav-btn.tap-anim .nav-btn-icon {
+    animation: navTap 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes navTap {
+    0% { transform: translateY(0) scale(1) rotate(0); }
+    35% { transform: translateY(-10px) scale(1.4) rotate(-12deg); filter: drop-shadow(0 0 15px #c8a85e); }
+    70% { transform: translateY(-3px) scale(0.9) rotate(8deg); }
+    100% { transform: translateY(0) scale(1) rotate(0); }
+  }
+  .nav-ripple {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 168, 94, 0.5), transparent 70%);
+    transform: scale(0);
+    animation: rippleGo 0.7s ease-out;
+    pointer-events: none;
+  }
+  @keyframes rippleGo {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, #c8a85e, #8b6f30);
+    color: #0d0b1a; padding: 11px 22px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    z-index: 2000; opacity: 0;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    white-space: nowrap;
+    box-shadow: 0 12px 30px rgba(200, 168, 94, 0.4);
+    pointer-events: none; border-radius: 2px;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ============ MODAL WHATSAPP ============ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 10, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-box {
+    width: 100%;
+    max-width: 380px;
+    background: linear-gradient(160deg, rgba(30, 25, 45, 0.98), rgba(15, 12, 25, 0.99));
+    border: 1px solid rgba(200, 168, 94, 0.35);
+    border-radius: 6px;
+    padding: 26px 22px;
+    position: relative;
+    transform: scale(0.85) translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(200, 168, 94, 0.1) inset,
+      0 0 80px rgba(200, 168, 94, 0.15);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-overlay.show .modal-box {
+    transform: scale(1) translateY(0);
+  }
+  .modal-box::-webkit-scrollbar { width: 2px; }
+  .modal-box::-webkit-scrollbar-thumb { background: rgba(200, 168, 94, 0.3); }
+
+  .modal-box::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px;
+    width: 20px; height: 20px;
+    border-top: 1px solid #c8a85e;
+    border-left: 1px solid #c8a85e;
+  }
+  .modal-box::after {
+    content: '';
+    position: absolute;
+    bottom: 8px; right: 8px;
+    width: 20px; height: 20px;
+    border-bottom: 1px solid #c8a85e;
+    border-right: 1px solid #c8a85e;
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(200, 168, 94, 0.2);
+    position: relative;
+  }
+  .modal-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(37, 211, 102, 0.2), rgba(37, 211, 102, 0.05));
+    border: 2px solid #25d366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #25d366;
+    box-shadow:
+      0 0 30px rgba(37, 211, 102, 0.4),
+      inset 0 0 20px rgba(37, 211, 102, 0.15);
+    animation: waPulse 2s ease-in-out infinite;
+  }
+  @keyframes waPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(37, 211, 102, 0.4), inset 0 0 20px rgba(37, 211, 102, 0.15); }
+    50% { box-shadow: 0 0 45px rgba(37, 211, 102, 0.7), inset 0 0 30px rgba(37, 211, 102, 0.25); }
+  }
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+  }
+  .modal-title em {
+    font-style: italic;
+    color: #c8a85e;
+  }
+  .modal-subtitle {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(200, 168, 94, 0.7);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .modal-body {
+    margin-bottom: 20px;
+  }
+
+  .modal-wa-number {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(37, 211, 102, 0.08);
+    border: 1px solid rgba(37, 211, 102, 0.25);
+    border-radius: 4px;
+    margin-bottom: 18px;
+  }
+  .modal-wa-number i {
+    color: #25d366;
+    font-size: 22px;
+    filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.6));
+  }
+  .modal-wa-number .wa-lbl {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .modal-wa-number .wa-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #25d366;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(37, 211, 102, 0.5);
+  }
+
+  .modal-field {
+    margin-bottom: 12px;
+  }
+  .modal-field-label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(200, 168, 94, 0.8);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .modal-field input,
+  .modal-field textarea,
+  .modal-field select {
+    width: 100%;
+    padding: 11px 13px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(200, 168, 94, 0.3);
+    border-radius: 3px;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: all 0.3s;
+  }
+  .modal-field input:focus,
+  .modal-field textarea:focus,
+  .modal-field select:focus {
+    border-color: #c8a85e;
+    background: rgba(200, 168, 94, 0.06);
+    box-shadow: 0 0 0 3px rgba(200, 168, 94, 0.12);
+  }
+  .modal-field input::placeholder,
+  .modal-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .modal-field textarea {
+    resize: none;
+    min-height: 65px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .modal-field select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a85e' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+  }
+  .modal-field select option {
+    background: #1a1528;
+    color: #fff;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .modal-btn {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .modal-btn-cancel {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .modal-btn-cancel:active {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .modal-btn-send {
+    background: linear-gradient(135deg, #25d366, #128c3e);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+  }
+  .modal-btn-send:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  }
+  .modal-btn-send i { font-size: 14px; }
+
+  .modal-note {
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .modal-note i { color: #25d366; margin-right: 3px; }
+
+  /* ============ FLOATING HEARTS ============ */
+  .fheart {
+    position: fixed; font-size: 14px;
+    color: rgba(200, 168, 94, 0.45);
+    animation: heartRise linear infinite;
+    pointer-events: none; z-index: 1;
+    text-shadow: -2px -2px 0 rgba(0,0,0,0.7), 0 0 8px rgba(200,168,94,0.6);
+  }
+  @keyframes heartRise {
+    0% { transform: translateY(100vh) rotate(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 380px) {
+    .hero-title-mag { font-size: 34px; letter-spacing: 4px; }
+    .hero-title-mag em { font-size: 40px; }
+    .cover-monogram { font-size: 60px; }
+    .cover-frame { width: 180px; height: 220px; }
+    .profile-name { font-size: 36px; }
+    .chapter-title { font-size: 22px; }
+    .chapter-num { font-size: 46px; }
+    .cd-seg-num { font-size: 22px; }
+    .nav-btn i { font-size: 13px; }
+    .nav-btn-label { font-size: 7px; }
+  }
+
+  @media (min-width: 500px) {
+    body { background: #05050a; }
+    .app {
+      max-width: 430px; margin: 0 auto;
+      border-left: 1px solid rgba(200, 168, 94, 0.15);
+      border-right: 1px solid rgba(200, 168, 94, 0.15);
+      box-shadow: 0 0 80px rgba(200, 168, 94, 0.12);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg">
+  <div class="ornament-ring"></div>
+  <div class="ornament-ring"></div>
+  <div class="ornament-ring"></div>
+</div>
+
+<div class="app">
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-brand">A&S</div>
+    <div class="topbar-page-num">
+      <strong id="pageNum">01</strong> / 05
+    </div>
+  </div>
+
+  <!-- ===== CONTENT ===== -->
+  <div class="content" id="content">
+
+    <!-- ========= BERANDA ========= -->
+    <div class="page active" id="page-home">
+      <div class="hero-mag">
+        <div class="hero-eyebrow m-card-stagger">Undangan Pernikahan</div>
+
+        <div class="cover-frame m-card-stagger">
+          <div class="cover-frame-inner">
+            <img class="cover-photo" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Foto Cover">
+            <div class="cover-monogram">A</div>
+            <div class="cover-amp">&</div>
+            <div class="cover-monogram">S</div>
+            <div class="cover-label">Selamanya & Selalu</div>
+          </div>
+        </div>
+
+        <div class="hero-title-mag m-card-stagger">
+          Andi
+          <em>&amp; Sari</em>
+        </div>
+
+        <div class="hero-divider m-card-stagger">✦ Simpan Tanggalnya ✦</div>
+        <div class="hero-date-mag m-card-stagger">14 · 12 · 2025</div>
+
+        <div class="cd-bar m-card-stagger">
+          <div class="cd-seg">
+            <span class="cd-seg-num" id="days">00</span>
+            <span class="cd-seg-label">Hari</span>
+          </div>
+          <div class="cd-seg">
+            <span class="cd-seg-num" id="hours">00</span>
+            <span class="cd-seg-label">Jam</span>
+          </div>
+          <div class="cd-seg">
+            <span class="cd-seg-num" id="minutes">00</span>
+            <span class="cd-seg-label">Menit</span>
+          </div>
+          <div class="cd-seg">
+            <span class="cd-seg-num" id="seconds">00</span>
+            <span class="cd-seg-label">Detik</span>
+          </div>
+        </div>
+
+        <div class="verse-mag m-card-stagger">
+          "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri supaya kamu dapat ketenangan hati dan menjadikan kasih sayang di antara kamu."
+          <div class="src">— QS. Ar-Rum : 21</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= MEMPELAI ========= -->
+    <div class="page" id="page-couple">
+      <div class="editorial-header m-card-stagger">
+        <div class="chapter-num">02</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Bab Dua</div>
+          <div class="chapter-title">Kedua <em>Mempelai</em></div>
+        </div>
+      </div>
+
+      <div class="m-card m-card-stagger">
+        <div class="profile-mag">
+          <div class="profile-frame">
+            <img src="cowok.jpg" alt="Andi">
+          </div>
+          <div class="profile-role">Mempelai Pria</div>
+          <div class="profile-name">Andi</div>
+          <div class="profile-fullname">Andi Pratama Wijaya, S.T.</div>
+          <div class="profile-parents">
+            <span class="lbl">Putra Dari</span>
+            Bpk. H. Wijaya Kusuma<br>&amp; Ibu Hj. Ratna Sari Dewi
+          </div>
+          <a href="https://instagram.com/andipratama" target="_blank" class="profile-ig">
+            <i class="fab fa-instagram"></i> @andipratama
+          </a>
+        </div>
+      </div>
+
+      <div class="couple-sep m-card-stagger">
+        <div class="couple-sep-line"></div>
+        <div class="couple-sep-icon">❦</div>
+        <div class="couple-sep-line"></div>
+      </div>
+
+      <div class="m-card m-card-stagger">
+        <div class="profile-mag">
+          <div class="profile-frame">
+            <img src="perempuan.jpg" alt="Sari">
+          </div>
+          <div class="profile-role">Mempelai Wanita</div>
+          <div class="profile-name">Sari</div>
+          <div class="profile-fullname">Sari Dewi Anggraini, S.E.</div>
+          <div class="profile-parents">
+            <span class="lbl">Putri Dari</span>
+            Bpk. H. Ahmad Fauzi<br>&amp; Ibu Hj. Siti Aminah
+          </div>
+          <a href="https://instagram.com/saridewi" target="_blank" class="profile-ig">
+            <i class="fab fa-instagram"></i> @saridewi
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= ACARA ========= -->
+    <div class="page" id="page-event">
+      <div class="editorial-header m-card-stagger">
+        <div class="chapter-num">03</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Bab Tiga</div>
+          <div class="chapter-title">Rangkaian <em>Acara</em></div>
+        </div>
+      </div>
+
+      <div class="m-card event-mag m-card-stagger">
+        <div class="event-mag-num">01</div>
+        <div class="event-mag-icon"><i class="fas fa-ring"></i></div>
+        <div class="event-mag-title">
+          Akad Nikah
+          <em>Prosesi Suci</em>
+        </div>
+        <div class="event-mag-sep"></div>
+        <div class="event-mag-row">
+          <i class="fas fa-calendar-alt"></i>
+          <div>
+            <strong>Sabtu, 14 Desember 2025</strong>
+            08.00 — 10.00 WIB
+          </div>
+        </div>
+        <div class="event-mag-row">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <strong>Masjid Agung Al-Azhar</strong>
+            Jl. Sisingamangaraja No.1, Jakarta Selatan
+          </div>
+        </div>
+        <a href="https://maps.google.com/?q=Masjid+Agung+Al+Azhar+Jakarta" target="_blank" class="event-mag-btn">
+          <i class="fas fa-directions"></i> Lihat Lokasi
+        </a>
+      </div>
+
+      <div class="m-card event-mag m-card-stagger">
+        <div class="event-mag-num">02</div>
+        <div class="event-mag-icon"><i class="fas fa-champagne-glasses"></i></div>
+        <div class="event-mag-title">
+          Resepsi
+          <em>Syukuran Pernikahan</em>
+        </div>
+        <div class="event-mag-sep"></div>
+        <div class="event-mag-row">
+          <i class="fas fa-calendar-alt"></i>
+          <div>
+            <strong>Sabtu, 14 Desember 2025</strong>
+            11.00 — 14.00 WIB
+          </div>
+        </div>
+        <div class="event-mag-row">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <strong>Balai Kartini</strong>
+            Jl. Gatot Subroto Kav. 37, Jakarta Selatan
+          </div>
+        </div>
+        <a href="https://maps.google.com/?q=Balai+Kartini+Jakarta" target="_blank" class="event-mag-btn">
+          <i class="fas fa-directions"></i> Lihat Lokasi
+        </a>
+      </div>
+    </div>
+
+    <!-- ========= GALERI ========= -->
+    <div class="page" id="page-gallery">
+      <div class="editorial-header m-card-stagger">
+        <div class="chapter-num">04</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Bab Empat</div>
+          <div class="chapter-title">Momen <em>Bahagia</em></div>
+        </div>
+      </div>
+
+      <div class="gallery-mag">
+        <div class="gal-item tall m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Prewedding">
+          <span class="gal-cap">Prewedding</span>
+        </div>
+        <div class="gal-item square m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" alt="Bersama">
+          <span class="gal-cap">Bersama</span>
+        </div>
+        <div class="gal-item square m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&q=80" alt="Lamaran">
+          <span class="gal-cap">Lamaran</span>
+        </div>
+        <div class="gal-item wide m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80" alt="Hari Bahagia">
+          <span class="gal-cap">Hari Bahagia</span>
+        </div>
+        <div class="gal-item small m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&q=80" alt="Cinta">
+          <span class="gal-cap">Cinta</span>
+        </div>
+        <div class="gal-item small m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&q=80" alt="Bahagia">
+          <span class="gal-cap">Bahagia</span>
+        </div>
+        <div class="gal-item small m-card-stagger">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&q=80" alt="Momen">
+          <span class="gal-cap">Momen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= UCAPAN ========= -->
+    <div class="page" id="page-wish">
+      <div class="editorial-header m-card-stagger">
+        <div class="chapter-num">05</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Bab Lima</div>
+          <div class="chapter-title">Ucapan &amp; <em>Doa</em></div>
+        </div>
+      </div>
+
+      <div class="m-card wish-form-mag m-card-stagger">
+        <div class="wa-info-box">
+          <i class="fab fa-whatsapp"></i>
+          <div>
+            <strong>Kirim via WhatsApp</strong>
+            Ucapan Anda akan dikirim langsung ke <b>0877-3866-9486</b>
+          </div>
+        </div>
+
+        <input type="text" id="wishName" placeholder="Nama Anda" maxlength="40">
+        <textarea id="wishText" placeholder="Tulis ucapan & doa terbaik..." maxlength="300"></textarea>
+        <div class="rsvp-mag">
+          <button class="rsvp-mag-btn" data-rsvp="Hadir">✓ Hadir</button>
+          <button class="rsvp-mag-btn" data-rsvp="Tidak Hadir">✗ Tidak Hadir</button>
+          <button class="rsvp-mag-btn" data-rsvp="Ragu">? Ragu</button>
+        </div>
+        <button class="wish-submit-mag" id="btnWish">
+          <i class="fab fa-whatsapp"></i> Kirim Ucapan
+        </button>
+      </div>
+
+      <div class="m-card m-card-stagger">
+        <div class="chapter-label" style="margin-bottom:10px;">Buku Tamu</div>
+        <div class="wishes-mag" id="wishes">
+          <div class="wish-card">
+            <div class="wish-card-top">
+              <span class="wish-card-name">Budi Santoso</span>
+              <span class="wish-card-time">2 JAM LALU</span>
+            </div>
+            <div class="wish-card-text">"Barakallahu lakuma wa baraka 'alaikuma. Semoga menjadi keluarga sakinah, mawaddah, warahmah."</div>
+            <span class="wish-tag hadir">✓ Hadir</span>
+          </div>
+          <div class="wish-card">
+            <div class="wish-card-top">
+              <span class="wish-card-name">Dewi Lestari</span>
+              <span class="wish-card-time">5 JAM LALU</span>
+            </div>
+            <div class="wish-card-text">"Selamat menempuh hidup baru! Semoga bahagia selalu sampai akhir hayat."</div>
+            <span class="wish-tag hadir">✓ Hadir</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-card m-card-stagger">
+        <div class="chapter-label" style="margin-bottom:10px;">Tanda Kasih</div>
+        <div class="gift-mag">
+          <div>
+            <div class="gift-mag-bank">Bank BCA</div>
+            <div class="gift-mag-num">1234567890</div>
+            <div class="gift-mag-owner">a.n. Andi Pratama</div>
+          </div>
+          <button class="gift-copy-mag" onclick="copyRek('1234567890', this)">Salin</button>
+        </div>
+        <div class="gift-mag" style="margin-bottom:0;">
+          <div>
+            <div class="gift-mag-bank">Bank Mandiri</div>
+            <div class="gift-mag-num">0987654321</div>
+            <div class="gift-mag-owner">a.n. Sari Dewi</div>
+          </div>
+          <button class="gift-copy-mag" onclick="copyRek('0987654321', this)">Salin</button>
+        </div>
+      </div>
+
+      <div class="closing-mag m-card-stagger">
+        <div class="closing-mag-script">Terima Kasih</div>
+        <div class="closing-mag-divider">❦</div>
+        <div class="closing-mag-text">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami<br>
+          apabila Bapak / Ibu / Saudara berkenan hadir<br>
+          untuk memberikan doa restu kepada kedua mempelai.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="nav">
+    <div class="nav-btn active" data-page="home">
+      <div class="nav-btn-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-btn-label">Beranda</span>
+    </div>
+    <div class="nav-btn" data-page="couple">
+      <div class="nav-btn-icon"><i class="fas fa-heart"></i></div>
+      <span class="nav-btn-label">Mempelai</span>
+    </div>
+    <div class="nav-btn" data-page="event">
+      <div class="nav-btn-icon"><i class="fas fa-calendar-check"></i></div>
+      <span class="nav-btn-label">Acara</span>
+    </div>
+    <div class="nav-btn" data-page="gallery">
+      <div class="nav-btn-icon"><i class="fas fa-images"></i></div>
+      <span class="nav-btn-label">Galeri</span>
+    </div>
+    <div class="nav-btn" data-page="wish">
+      <div class="nav-btn-icon"><i class="fas fa-envelope"></i></div>
+      <span class="nav-btn-label">Ucapan</span>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ===== MODAL WHATSAPP ===== -->
+<div class="modal-overlay" id="waModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-icon"><i class="fab fa-whatsapp"></i></div>
+      <div class="modal-title">Kirim <em>Ucapan</em></div>
+      <div class="modal-subtitle">Konfirmasi Data Anda</div>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-wa-number">
+        <i class="fab fa-whatsapp"></i>
+        <div>
+          <div class="wa-lbl">Tujuan WhatsApp</div>
+          <div class="wa-num">0877-3866-9486</div>
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-field-label">Nama Lengkap *</label>
+        <input type="text" id="mName" placeholder="Masukkan nama Anda" maxlength="40">
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-field-label">Ucapan & Doa *</label>
+        <textarea id="mText" placeholder="Tulis ucapan & doa terbaik..." maxlength="300"></textarea>
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-field-label">Konfirmasi Kehadiran *</label>
+        <select id="mRsvp">
+          <option value="">-- Pilih Kehadiran --</option>
+          <option value="Hadir">✓ Hadir</option>
+          <option value="Tidak Hadir">✗ Tidak Hadir</option>
+          <option value="Ragu">? Masih Ragu</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" id="btnCancel">
+        <i class="fas fa-times"></i> Batal
+      </button>
+      <button class="modal-btn modal-btn-send" id="btnSend">
+        <i class="fab fa-whatsapp"></i> Kirim
+      </button>
+    </div>
+
+    <div class="modal-note">
+      <i class="fas fa-lock"></i> Data Anda akan dikirim aman ke WhatsApp mempelai
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== NOMOR WHATSAPP TUJUAN =====
+  const WA_NUMBER = '6287738669486'; // Format internasional tanpa +
+
+  // ===== PAGE ORDER =====
+  const pageOrder = ['home', 'couple', 'event', 'gallery', 'wish'];
+  const pageNumEl = document.getElementById('pageNum');
+
+  // ===== NAV =====
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const pages = document.querySelectorAll('.page');
+  const content = document.getElementById('content');
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const pageName = btn.dataset.page;
+
+      btn.classList.add('tap-anim');
+      setTimeout(() => btn.classList.remove('tap-anim'), 600);
+
+      const ripple = document.createElement('span');
+      ripple.className = 'nav-ripple';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+
+      navBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      pages.forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageName).classList.add('active');
+
+      pageNumEl.textContent = String(pageOrder.indexOf(pageName) + 1).padStart(2, '0');
+      content.scrollTop = 0;
+    });
+  });
+
+  // ===== COUNTDOWN =====
+  const target = new Date('2025-12-14T08:00:00').getTime();
+  function updateCd() {
+    const now = Date.now();
+    const d = target - now;
+    if (d <= 0) {
+      ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+    const days = Math.floor(d / 86400000);
+    const hrs = Math.floor((d % 86400000) / 3600000);
+    const min = Math.floor((d % 3600000) / 60000);
+    const sec = Math.floor((d % 60000) / 1000);
+    document.getElementById('days').textContent = String(days).padStart(2,'0');
+    document.getElementById('hours').textContent = String(hrs).padStart(2,'0');
+    document.getElementById('minutes').textContent = String(min).padStart(2,'0');
+    document.getElementById('seconds').textContent = String(sec).padStart(2,'0');
+  }
+  setInterval(updateCd, 1000);
+  updateCd();
+
+  // ===== RSVP QUICK SELECT =====
+  let rsvpQuick = '';
+  document.querySelectorAll('.rsvp-mag-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.rsvp-mag-btn').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+      rsvpQuick = b.dataset.rsvp;
+    });
+  });
+
+  // ===== MODAL =====
+  const waModal = document.getElementById('waModal');
+  const mName = document.getElementById('mName');
+  const mText = document.getElementById('mText');
+  const mRsvp = document.getElementById('mRsvp');
+
+  // Buka modal saat klik kirim ucapan
+  document.getElementById('btnWish').addEventListener('click', () => {
+    const name = document.getElementById('wishName').value.trim();
+    const text = document.getElementById('wishText').value.trim();
+
+    // Prefill dengan data yang sudah diisi (jika ada)
+    mName.value = name;
+    mText.value = text;
+    if (rsvpQuick) mRsvp.value = rsvpQuick;
+
+    // Tampilkan modal
+    waModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // Focus ke field yang kosong
+    setTimeout(() => {
+      if (!mName.value) mName.focus();
+      else if (!mText.value) mText.focus();
+      else mRsvp.focus();
+    }, 400);
+  });
+
+  // Tutup modal
+  function closeModal() {
+    waModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('btnCancel').addEventListener('click', closeModal);
+
+  waModal.addEventListener('click', (e) => {
+    if (e.target === waModal) closeModal();
+  });
+
+  // ===== KIRIM KE WHATSAPP =====
+  document.getElementById('btnSend').addEventListener('click', () => {
+    const name = mName.value.trim();
+    const text = mText.value.trim();
+    const rsvp = mRsvp.value;
+
+    // Validasi semua field wajib
+    if (!name) { toast('Mohon isi nama lengkap'); mName.focus(); return; }
+    if (!text) { toast('Mohon isi ucapan & doa'); mText.focus(); return; }
+    if (!rsvp) { toast('Mohon pilih kehadiran'); mRsvp.focus(); return; }
+
+    // Susun pesan WhatsApp
+    const pesan =
+`Assalamu'alaikum Warahmatullahi Wabarakatuh
+
+*UCAPAN & DOA UNTUK PERNIKAHAN ANDI & SARI*
+
+━━━━━━━━━━━━━━━━━━━━
+👤 *Nama:* ${name}
+📩 *Kehadiran:* ${rsvp}
+━━━━━━━━━━━━━━━━━━━━
+
+💌 *Ucapan & Doa:*
+"${text}"
+
+━━━━━━━━━━━━━━━━━━━━
+Terima kasih atas doa & restunya 🙏
+
+_Pesan ini dikirim otomatis dari Undangan Digital Andi & Sari_`;
+
+    const encoded = encodeURIComponent(pesan);
+    const waUrl = `https://wa.me/${WA_NUMBER}?text=${encoded}`;
+
+    // Buka WhatsApp
+    window.open(waUrl, '_blank');
+
+    // Tambahkan ke buku tamu
+    addToGuestBook(name, text, rsvp);
+
+    // Reset form
+    document.getElementById('wishName').value = '';
+    document.getElementById('wishText').value = '';
+    document.querySelectorAll('.rsvp-mag-btn').forEach(x => x.classList.remove('sel'));
+    rsvpQuick = '';
+
+    closeModal();
+    toast('Ucapan terkirim ke WhatsApp 💚');
+  });
+
+  // ===== TAMBAH KE BUKU TAMU =====
+  function addToGuestBook(name, text, rsvp) {
+    const list = document.getElementById('wishes');
+    const card = document.createElement('div');
+    card.className = 'wish-card';
+
+    let tagClass = rsvp === 'Hadir' ? 'hadir' : rsvp === 'Tidak Hadir' ? 'tidak' : 'ragu';
+    let icon = rsvp === 'Hadir' ? '✓' : rsvp === 'Tidak Hadir' ? '✗' : '?';
+
+    card.innerHTML = `
+      <div class="wish-card-top">
+        <span class="wish-card-name">${esc(name)}</span>
+        <span class="wish-card-time">BARU SAJA</span>
+      </div>
+      <div class="wish-card-text">"${esc(text)}"</div>
+      <span class="wish-tag ${tagClass}">${icon} ${esc(rsvp)}</span>
+    `;
+    list.insertBefore(card, list.firstChild);
+  }
+
+  // ===== COPY REKENING =====
+  function copyRek(num, btn) {
+    navigator.clipboard.writeText(num).then(() => {
+      const old = btn.textContent;
+      btn.textContent = 'Tersalin!';
+      setTimeout(() => btn.textContent = old, 1800);
+      toast('Nomor rekening disalin');
+    }).catch(() => toast('Gagal menyalin'));
+  }
+
+  // ===== TOAST =====
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  // ===== ESCAPE =====
+  function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+  // ===== PARTICLES =====
+  function dust() {
+    const d = document.createElement('div');
+    d.className = 'dust';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (7 + Math.random() * 6) + 's';
+    d.style.animationDelay = Math.random() * 3 + 's';
+    document.querySelector('.bg').appendChild(d);
+    setTimeout(() => d.remove(), 15000);
+  }
+  for (let i = 0; i < 15; i++) setTimeout(dust, i * 250);
+  setInterval(dust, 900);
+
+  // ===== FLOATING HEARTS =====
+  function fheart() {
+    const h = document.createElement('div');
+    h.className = 'fheart';
+    h.textContent = ['❤','✦','✧','❦','·'][Math.floor(Math.random() * 5)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (10 + Math.random() * 10) + 'px';
+    h.style.animationDuration = (6 + Math.random() * 5) + 's';
+    h.style.animationDelay = Math.random() * 2 + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 13000);
+  }
+  for (let i = 0; i < 4; i++) setTimeout(fheart, i * 500);
+  setInterval(fheart, 1800);
+
+  // ===== SWIPE =====
+  let tsX = 0;
+  content.addEventListener('touchstart', e => tsX = e.changedTouches[0].screenX, {passive: true});
+  content.addEventListener('touchend', e => {
+    const diff = tsX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) < 70) return;
+    const cur = document.querySelector('.page.active').id.replace('page-','');
+    let idx = pageOrder.indexOf(cur);
+    if (diff > 0 && idx < pageOrder.length - 1) idx++;
+    else if (diff < 0 && idx > 0) idx--;
+    else return;
+    const next = pageOrder[idx];
+    navBtns.forEach(b => b.classList.toggle('active', b.dataset.page === next));
+    pages.forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + next).classList.add('active');
+    pageNumEl.textContent = String(idx + 1).padStart(2, '0');
+    content.scrollTop = 0;
+  }, {passive: true});
+</script>
+
+</body>
+</html>
